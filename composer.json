@@ -1,0 +1,25 @@
+{
+  "name": "superrb/google-recaptcha",
+  "description": "Symfony 4 Google Recaptcha Integration",
+  "keywords": [
+    "cms"
+  ],
+  "homepage": "https://github.com/superrbstudio/google-recaptcha",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Superrb Team",
+      "email": "tech@superrb.com"
+    }
+  ],
+  "require": {
+    "kunstmaan/cms-pack": "~1.0"
+  },
+  "autoload": {
+    "psr-4" : {
+      "Superrb\\GoogleRecaptchaBundle\\": "src/"
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
