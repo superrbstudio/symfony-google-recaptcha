@@ -14,7 +14,7 @@
   ],
   "require": {
     "guzzlehttp/guzzle": "^6.3",
-    "symfony/twig-bundle": "*",
+    "symfony/twig-bundle": "*"
   },
   "autoload": {
     "psr-4" : {
