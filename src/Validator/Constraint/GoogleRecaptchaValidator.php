@@ -28,22 +28,9 @@ class GoogleRecaptchaValidator extends ConstraintValidator
             throw new UnexpectedTypeException($constraint, GoogleRecaptcha::class);
         }
 
-        // custom constraints should ignore null and empty values to allow
-        // other constraints (NotBlank, NotNull, etc.) take care of that
-        if (null === $value || '' === $value) {
-            return;
-        }
-
-        if (!is_string($value)) {
-            // throw this exception if your validator cannot handle the passed type so that it can be marked as invalid
-            throw new UnexpectedValueException($value, 'string');
-
-            // separate multiple types using pipes
-            // throw new UnexpectedValueException($value, 'string|int');
-        }
-
         // validate the value
-        if (!$this->getGoogleRecaptcha()->validateToken($value)) {
+        // consider empty values as a failure
+        if (null === $value || '' === $value || !$this->getGoogleRecaptcha()->validateToken($value)) {
             $this->context->buildViolation($constraint->message)
                 ->setParameter('{{ string }}', $value)
                 ->addViolation();

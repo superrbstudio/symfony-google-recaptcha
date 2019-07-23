@@ -20,3 +20,9 @@ services:
             - "@logger"
             - "%superrb_google_recaptcha.secret_key%"
             - "%superrb_google_recaptcha.api_url%"
+
+    Superrb\GoogleRecaptchaBundle\Twig\AppExtension:
+        arguments:
+            - "@doctrine.orm.default_entity_manager"
+            - "@templating.engine.twig"
+            - "%superrb_google_recaptcha.site_key%"
