@@ -52,17 +52,83 @@ You can use the following Twig function to output the standard frontend integrat
 {{ form_end(form) }}
 ```
 
+### Javascript (Compatible with Turbolinks)
+Create a constant for the site key and create a container to hold the configuration. This should be put in your layout so that it is always available when using Turbolinks, if you aren't using Turbolinks then it only needs to be on the page with the form you are protecting.
+```twig
+<script>const RECAPTCHA_KEY = '{{ google_recaptcha_site_key() }}';</script>
+<div id="recaptcha-container" data-turbolinks-permanent></div>
+```
+Use this Javascript component and customise to your needs
+```javascript
+import LiveNodeList from 'live-node-list'
+import {bind} from 'decko'
+import { load as loadRecaptcha } from 'recaptcha-v3'
+
+export default class GoogleRecaptcha {
+  forms = new LiveNodeList('form.form--contact')
+
+  constructor () {
+    this.registerListeners()
+  }
+
+  @bind
+  handleSubmit (e) {
+    const recaptchaInput = document.querySelector('input.superrb-google-recaptcha')
+    if (recaptchaInput && !recaptchaInput.value) {
+      e.preventDefault()
+      e.stopPropagation()
+      return this.setupRecaptcha(e)
+    }
+
+    return true
+  }
+
+  @bind
+  async setupRecaptcha(e) {
+    const recaptchaInput = document.querySelector('input.superrb-google-recaptcha')
+    if (recaptchaInput) {
+      // Load recaptcha library
+      if (!window.recaptcha) {
+        window.recaptcha = await loadRecaptcha('explicit', {autoHideBadge: true})
+        this.recaptchaHandle = grecaptcha.render('recaptcha-container', {
+          'sitekey': RECAPTCHA_KEY,
+          'badge': 'inline', // must be inline
+          'size': 'invisible' // must be invisible
+
+        })
+      }
+
+      // Get a recaptcha token
+      const token = await window.grecaptcha.execute(this.recaptchaHandle)
+
+      // Append the recaptcha token to the form
+      recaptchaInput.value = token
+
+      const form = e.currentTarget || e.target
+      form.submit()
+    }
+  }
+
+  @bind
+  registerListeners() {
+    const recaptchaInput = document.querySelector('input.superrb-google-recaptcha')
+    if(recaptchaInput) {
+      recaptchaInput.value = null
+    }
+
+    this.forms.addEventListener('submit', this.handleSubmit)
+  }
+}
+```
 ### Ajax form using jQuery
 
-If you are submitting the form using Ajax and jQuery you can use the following integration:
-
-Load the library and create a global variable for the site key:
+Load the library and create a global constant for the site key:
 
 ```twig
 {{ google_recaptcha_output_src() | raw }}
-<script>var recaptchaSiteKey = '{{ google_recaptcha_site_key() }}';</script>
+<script>const RECAPTCHA_KEY = '{{ google_recaptcha_site_key() }}';</script>
 ```
-
+Bind a jQuery event to the form submit that generates a token and inserts it into the hiden field
 ```javascript
 $('form').unbind('submit').submit(function(e){
     e.preventDefault();
@@ -70,7 +136,7 @@ $('form').unbind('submit').submit(function(e){
 
     // get the token
     grecaptcha.ready(function() {
-        grecaptcha.execute(recaptchaSiteKey, {action: 'homepage'}).then(function (token) {
+        grecaptcha.execute(RECAPTCHA_KEY, {action: 'homepage'}).then(function (token) {
             // add the token to the hidden field
             $('input.superrb-google-recaptcha').val(token);
             
