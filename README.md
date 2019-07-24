@@ -24,7 +24,7 @@ use Superrb\GoogleRecaptchaBundle\Validator\Constraint\GoogleRecaptcha;
 public function buildForm(FormBuilderInterface $builder, array $options)
 {
     // ...
-    $builder->add'recaptcha', HiddenType::class, [
+    $builder->add('recaptcha', HiddenType::class, [
         'attr' => [
             'class' => 'superrb-google-recaptcha',
         ],
