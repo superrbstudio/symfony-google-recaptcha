@@ -55,7 +55,7 @@ class AppExtension extends AbstractExtension
         return [
             new TwigFunction('google_recaptcha_standard_integration', [$this, 'outputStandardIntegration']),
             new TwigFunction('google_recaptcha_site_key', [$this, 'outputSiteKey']),
-            new TwigFunction('google_output_src', [$this, 'outputSrc']),
+            new TwigFunction('google_recaptcha_output_src', [$this, 'outputSrc']),
             new TwigFunction('google_recaptcha_src_url', [$this, 'outputSrcUrl']),
         ];
     }
