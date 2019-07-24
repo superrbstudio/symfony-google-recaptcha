@@ -29,16 +29,22 @@ class AppExtension extends AbstractExtension
     protected $siteKey;
 
     /**
+     * @var string
+     */
+    protected $srcUrl;
+
+    /**
      * AppExtension constructor.
      * @param EntityManagerInterface $em
      * @param EngineInterface $templating
      * @param string $siteKey
      */
-    public function __construct(EntityManagerInterface $em, EngineInterface $templating, string $siteKey)
+    public function __construct(EntityManagerInterface $em, EngineInterface $templating, string $siteKey, string $srcUrl)
     {
         $this->em = $em;
         $this->templating = $templating;
         $this->siteKey = $siteKey;
+        $this->srcUrl = $srcUrl;
     }
 
     /**
@@ -49,6 +55,8 @@ class AppExtension extends AbstractExtension
         return [
             new TwigFunction('google_recaptcha_standard_integration', [$this, 'outputStandardIntegration']),
             new TwigFunction('google_recaptcha_site_key', [$this, 'outputSiteKey']),
+            new TwigFunction('google_output_src', [$this, 'outputSrc']),
+            new TwigFunction('google_recaptcha_src_url', [$this, 'outputSrcUrl']),
         ];
     }
 
@@ -59,7 +67,21 @@ class AppExtension extends AbstractExtension
     {
         return $this->templating->render('@SuperrbGoogleRecaptcha/Twig/standard_integration.html.twig', [
             'site_key' => $this->siteKey,
+            'src_url' => $this->srcUrl,
         ]);
+    }
+
+    public function outputSrc()
+    {
+        return '<script src="' . $this->outputSrcUrl() . '"></script>';
+    }
+
+    /**
+     * @return string
+     */
+    public function outputSrcUrl()
+    {
+        return $this->srcUrl;
     }
 
     /**

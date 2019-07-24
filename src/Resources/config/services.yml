@@ -1,7 +1,8 @@
 parameters:
-    superrb_google_recaptcha.api_url: https://www.google.com/recaptcha/api/siteverify
     superrb_google_recaptcha.site_key: '%env(SUPERRB_GOOGLE_RECAPTCHA_SITE_KEY)%'
     superrb_google_recaptcha.secret_key: '%env(SUPERRB_GOOGLE_RECAPTCHA_SECRET_KEY)%'
+    superrb_google_recaptcha.api_url: https://www.google.com/recaptcha/api/siteverify
+    superrb_google_recaptcha.src_url: "https://www.google.com/recaptcha/api.js?render=%superrb_google_recaptcha.site_key%"
 
 services:
     # default configuration for services in *this* file
@@ -26,3 +27,4 @@ services:
             - "@doctrine.orm.default_entity_manager"
             - "@templating.engine.twig"
             - "%superrb_google_recaptcha.site_key%"
+            - "%superrb_google_recaptcha.src_url%"

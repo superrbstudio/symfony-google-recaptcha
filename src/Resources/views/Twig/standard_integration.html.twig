@@ -1,4 +1,4 @@
-<script src="https://www.google.com/recaptcha/api.js?render={{ site_key }}"></script>
+<script src="{{ src_url }}"></script>
 <script>
     grecaptcha.ready(function() {
         grecaptcha.execute('{{ site_key }}', {action: 'homepage'}).then(function(token) {
