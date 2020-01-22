@@ -3,7 +3,7 @@
 namespace Superrb\GoogleRecaptchaBundle\Twig;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -19,9 +19,9 @@ class AppExtension extends AbstractExtension
     protected $em;
 
     /**
-     * @var EngineInterface
+     * @var Environment
      */
-    protected $templating;
+    protected $twig;
 
     /**
      * @var string
@@ -36,13 +36,13 @@ class AppExtension extends AbstractExtension
     /**
      * AppExtension constructor.
      * @param EntityManagerInterface $em
-     * @param EngineInterface $templating
+     * @param Environment $twig
      * @param string $siteKey
      */
-    public function __construct(EntityManagerInterface $em, EngineInterface $templating, string $siteKey, string $srcUrl)
+    public function __construct(EntityManagerInterface $em, Environment $twig, string $siteKey, string $srcUrl)
     {
         $this->em = $em;
-        $this->templating = $templating;
+        $this->twig = $twig;
         $this->siteKey = $siteKey;
         $this->srcUrl = $srcUrl;
     }
@@ -65,7 +65,7 @@ class AppExtension extends AbstractExtension
      */
     public function outputStandardIntegration()
     {
-        return $this->templating->render('@SuperrbGoogleRecaptcha/Twig/standard_integration.html.twig', [
+        return $this->twig->render('@SuperrbGoogleRecaptcha/Twig/standard_integration.html.twig', [
             'site_key' => $this->siteKey,
             'src_url' => $this->srcUrl,
         ]);

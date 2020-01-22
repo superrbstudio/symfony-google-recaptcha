@@ -25,6 +25,6 @@ services:
     Superrb\GoogleRecaptchaBundle\Twig\AppExtension:
         arguments:
             - "@doctrine.orm.default_entity_manager"
-            - "@templating.engine.twig"
+            - "@twig"
             - "%superrb_google_recaptcha.site_key%"
             - "%superrb_google_recaptcha.src_url%"
