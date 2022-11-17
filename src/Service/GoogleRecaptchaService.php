@@ -69,6 +69,10 @@ class GoogleRecaptchaService
             $data = json_decode((string) $response->getBody());
 
             if (true === $data->success) {
+                $this->logger->info('Success while validating recaptcha', [
+                    'response' => json_decode((string) $response->getBody()),
+                ]);
+                
                 return true;
             }
 
@@ -78,7 +82,7 @@ class GoogleRecaptchaService
 
             return false;
         } catch (\Throwable $th) {
-            $this->logger->error('Error while validating recaptcha', [
+            $this->logger->error('Fatal Error while validating recaptcha', [
                 'message'   => $th->getMessage(),
                 'exception' => $th,
             ]);
